@@ -1,56 +1,38 @@
-from typing import Generic, TypeVar
+from typing import Callable, Generic, TypeVar
 
 import attrs
 import cattrs
 
 converter = cattrs.GenConverter()
 
-converter.register_structure_hook(lambda x, cls: cls.fromtimestamp(x))
-converter.register_structure_hook(lambda x: int(x.timestamp()))
 
-
-def strip_empty_fields_unstructure_hook(cls):
-    def remove_empty_values(d):
-        cleaned_dict = {}
-        for k, v in d.items():
-            if isinstance(v, dict) and v:
-                cleaned_v = remove_empty_values(v)
-                if cleaned_v:
-                    cleaned_dict[k] = cleaned_v
-            elif isinstance(v, (list, tuple, set)) and not v:
+def get_apisix_unstructure_hook(cls) -> Callable[[object], dict]:
+    def apisix_json_format(obj: object) -> dict:
+        results = {}
+        for field in attrs.fields(cls):
+            field_data = getattr(obj, field.name)
+            if not field_data and not isinstance(field_data, (int, float, bool)):
                 continue
-            elif v not in (None, ""):
-                cleaned_dict[k] = v
-        return cleaned_dict
 
-    def strip_empty_fields(obj):
-        primitive = converter.unstructure_attrs_asdict(obj)
-        if "plugins" in primitive:
-            plugins_dict = {}
-            for plugin in obj.plugins:
-                plugins_dict[plugin.apisix_key_name()] = converter.unstructure_attrs_asdict(plugin)
+            key = field.metadata.get("apisix_keyword", field.name)
+            results[key] = converter.unstructure(field_data)
 
-            primitive["plugins"] = plugins_dict
+        return results
 
-        return remove_empty_values(primitive)
-
-    return strip_empty_fields
+    return apisix_json_format
 
 
-def all_attrs_class_predicate(obj):
-    return hasattr(obj, "__attrs_attrs__")
-
-
-converter.register_unstructure_hook_factory(all_attrs_class_predicate, strip_empty_fields_unstructure_hook)
+converter.register_unstructure_hook_factory(
+    lambda obj: hasattr(obj, "__attrs_attrs__"), get_apisix_unstructure_hook
+)
 
 
 V = TypeVar("V")
-T = TypeVar("T")
 
 
 @attrs.define()
 class BaseResponse(Generic[V]):
-    key: str
+    key: str = attrs.field(converter=str)
     created_index: int = attrs.field(converter=int)
     modified_index: int = attrs.field(converter=int)
     value: V = attrs.field()

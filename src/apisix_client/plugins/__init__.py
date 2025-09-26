@@ -1,1 +1,1 @@
-from apisix_client.plugins.models import KeyAuth, LimitCount, PluginTypes
+from apisix_client.plugins.models import KeyAuth, LimitCount, Plugins

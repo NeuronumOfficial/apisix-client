@@ -1,9 +1,9 @@
 from datetime import datetime
-from typing import Dict, List
 
 import attrs
 
-from apisix_client.plugins import PluginTypes
+from apisix_client.common.converter import str_or_none
+from apisix_client.plugins import Plugins
 
 
 @attrs.define()
@@ -11,14 +11,14 @@ class ConsumerResponse:
     create_time: datetime = attrs.field(converter=datetime.fromtimestamp)
     update_time: datetime = attrs.field(converter=datetime.fromtimestamp)
     username: str = attrs.field(converter=str)
-    desc: str = attrs.field(converter=str, default="")
-    plugins: Dict[str, PluginTypes] = attrs.field(default={})
+    desc: str | None = attrs.field(converter=str_or_none, default=None)
+    plugins: Plugins | None = attrs.field(default=None)
 
 
 @attrs.define()
 class Consumer:
     username: str = attrs.field(converter=str)
-    group_id: str = attrs.field(default="", converter=str)
-    plugins: List[PluginTypes] = attrs.field(default=[])
-    desc: str = attrs.field(default="", converter=str)
-    labels: dict = attrs.field(default={})
+    group_id: str | None = attrs.field(converter=str_or_none, default=None)
+    plugins: Plugins | None = attrs.field(default=None)
+    desc: str | None = attrs.field(converter=str_or_none, default=None)
+    labels: dict | None = attrs.field(default=None)
