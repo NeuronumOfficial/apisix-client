@@ -5,7 +5,7 @@ from enum import IntEnum
 import attrs
 
 from apisix_client.common import Timeout, str_or_none
-from apisix_client.plugins import Plugins
+from apisix_client.plugin import Plugins
 
 
 @attrs.define()

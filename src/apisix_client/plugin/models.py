@@ -1,6 +1,6 @@
 import attrs
 
-from apisix_client.common.converter import bool_or_none, str_or_none
+from apisix_client.common import ATTRS_META_APISIX_KEYWORD, bool_or_none, str_or_none
 
 
 @attrs.define()
@@ -22,5 +22,7 @@ class LimitCount:
 
 @attrs.define()
 class Plugins:
-    key_auth: KeyAuth | None = attrs.field(default=None, metadata={"apisix_keyword": "key-auth"})
-    limit_count: LimitCount | None = attrs.field(default=None, metadata={"apisix_keyword": "limit-count"})
+    key_auth: KeyAuth | None = attrs.field(default=None, metadata={ATTRS_META_APISIX_KEYWORD: "key-auth"})
+    limit_count: LimitCount | None = attrs.field(
+        default=None, metadata={ATTRS_META_APISIX_KEYWORD: "limit-count"}
+    )

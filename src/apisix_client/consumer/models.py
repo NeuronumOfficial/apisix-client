@@ -3,7 +3,7 @@ from datetime import datetime
 import attrs
 
 from apisix_client.common.converter import str_or_none
-from apisix_client.plugins import Plugins
+from apisix_client.plugin import Plugins
 
 
 @attrs.define()

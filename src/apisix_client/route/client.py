@@ -1,7 +1,7 @@
 import httpx
 
 from apisix_client.base_models import BaseResponse, converter
-from apisix_client.common.pythonize_response import pythonize_json_response
+from apisix_client.common import Pagging, pythonize_json_response
 from apisix_client.protocols import Logger
 from apisix_client.route.models import Route, RouteResponse
 
@@ -14,7 +14,8 @@ class RouteClient:
 
     def _handle_response_after_create(self, response: httpx.Response) -> str | None:
         if response.status_code == 400:  # Bad request
-            raise RuntimeError(f"Bad request!\n{response.text}")
+            self._logger.info(f"Bad request! {response.text}")
+            return None
 
         json_response = response.json()
         return str(json_response["value"]["id"]) if response.status_code in (200, 201) else None
@@ -39,8 +40,15 @@ class RouteClient:
 
         return converter.structure(pythonize_json_response(json_response), BaseResponse[RouteResponse])
 
-    def get_all(self) -> tuple[BaseResponse[RouteResponse], ...]:
-        r = self._httpx_client.get(self.url_postfix)
+    def get_all(
+        self, pagging: Pagging | list | tuple | None = None
+    ) -> tuple[BaseResponse[RouteResponse], ...]:
+        pagging_struct = None
+        if pagging is not None:
+            pagging_struct = Pagging(*pagging) if isinstance(pagging, list | tuple) else pagging
+
+        params = {} if pagging_struct is None else pagging_struct.as_dict
+        r = self._httpx_client.get(self.url_postfix, params=params)
         json_response = r.json()
 
         return tuple(

@@ -44,3 +44,7 @@ Homepage = "https://github.com/NeuronumOfficial/apisix-client"
 Documentation = "https://github.com/NeuronumOfficial/apisix-client"
 Repository = "https://github.com/NeuronumOfficial/apisix-client"
 "Bug Tracker" = "https://github.com/NeuronumOfficial/apisix-client/issues"
+
+
+[tool.black]
+line-length = 110
