@@ -1,6 +1,5 @@
 # Apisix Python Client
 [![pypi](https://img.shields.io/pypi/v/apisix_client.svg)](https://pypi.python.org/pypi/apisix_client)
-[![python](https://img.shields.io/pypi/pyversions/apisix_client.svg)](https://pypi.python.org/pypi/apisix_client)
 [![license](https://img.shields.io/pypi/l/apisix_client.svg)](https://pypi.python.org/pypi/apisix_client)
 
 The Apisix client Library provides convenient access to the Apisix admin API from applications written in Python.
@@ -13,7 +12,7 @@ Explore the Apisix admin API documentation [here](https://apisix.apache.org/docs
 # Installation
 
 ```sh
-pip install --upgrade apisix_client
+pip install --upgrade apisix-client
 ```
 
 # Usage
