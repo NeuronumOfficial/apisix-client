@@ -1,5 +1,3 @@
-from typing import Self
-
 import attrs
 
 ATTRS_META_APISIX_KEYWORD = "apisix_keyword"
