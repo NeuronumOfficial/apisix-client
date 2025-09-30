@@ -1,25 +1,11 @@
 import re
-from datetime import datetime
 from enum import IntEnum
 
 import attrs
 
+from apisix_client.base_models import response_class_factory
 from apisix_client.common import Timeout, str_or_none
 from apisix_client.plugin import Plugins
-
-
-@attrs.define()
-class RouteResponse:
-    id: str = attrs.field(converter=str)
-    create_time: datetime = attrs.field(converter=datetime.fromtimestamp)
-    update_time: datetime = attrs.field(converter=datetime.fromtimestamp)
-    uri: str = attrs.field(converter=str)
-    methods: list[str] = attrs.field(converter=list)
-    status: int = attrs.field(converter=int)
-    service_id: str | None = attrs.field(converter=str_or_none, default=None)
-    name: str | None = attrs.field(converter=str_or_none, default=None)
-    desc: str | None = attrs.field(converter=str_or_none, default=None)
-    plugins: Plugins | None = attrs.field(default=None)
 
 
 def route_id_validator(value) -> None:
@@ -93,3 +79,6 @@ class Route:
     priority: int | None = attrs.field(default=0)
     enable_websocket: bool | None = attrs.field(default=False)
     status: RouteStatus | None = attrs.field(default=RouteStatus.ENABLED)
+
+
+RouteResponse = response_class_factory(Route)

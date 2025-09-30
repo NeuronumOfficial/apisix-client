@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Callable, Generic, TypeVar
 
 import attrs
@@ -39,3 +40,17 @@ class BaseResponse(Generic[V]):
     created_index: int = attrs.field(converter=int)
     modified_index: int = attrs.field(converter=int)
     value: V = attrs.field()
+
+
+def response_class_factory(cls: type) -> type:
+    return attrs.make_class(
+        f"Response{cls.__name__}",
+        {
+            "id": attrs.field(converter=str, default=""),
+            "create_time": attrs.field(converter=datetime.fromtimestamp, default=datetime.fromtimestamp(0)),
+            "update_time": attrs.field(converter=datetime.fromtimestamp, default=datetime.fromtimestamp(0)),
+        },
+        bases=(cls,),
+        slots=True,
+        frozen=True,
+    )
