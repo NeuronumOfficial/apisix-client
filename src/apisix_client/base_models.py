@@ -4,7 +4,7 @@ from typing import Callable, Generic, TypeVar
 import attrs
 import cattrs
 
-from apisix_client.common import ATTRS_META_APISIX_KEYWORD
+from apisix_client.common import ATTRS_META_APISIX_KEYWORD, str_or_none
 
 converter = cattrs.GenConverter()
 
@@ -28,6 +28,12 @@ def get_apisix_unstructure_hook(cls) -> Callable[[object], dict]:
 converter.register_unstructure_hook_factory(
     lambda obj: hasattr(obj, "__attrs_attrs__"), get_apisix_unstructure_hook
 )
+
+
+@attrs.define()
+class BaseSchema:
+    name: str | None = attrs.field(default=None, converter=str_or_none)
+    desc: str | None = attrs.field(default=None, converter=str_or_none)
 
 
 V = TypeVar("V")
