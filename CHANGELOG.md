@@ -6,11 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [0.3.0] - 2025-10-01
+## [0.3.0] - 2025-10-04
+
+### Added
+
+- Added factory to generate response classes.
 
 ### Changed
 
-- Replaced explicit class for Api Response with class factory.
+- Exactly defined Response classes were replaced with generated classses.
+
 
 ## [0.2.0] - 2025-09-27
 
