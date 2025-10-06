@@ -35,4 +35,3 @@ class ApisixClient:
         self.service = ServiceClient(self._httpx_client, logger=self._logger)
         self.ssl = SSLClient(self._httpx_client, logger=self._logger)
         self.upstream = UpstreamClient(self._httpx_client, logger=self._logger)
-

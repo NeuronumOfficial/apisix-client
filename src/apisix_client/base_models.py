@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Callable, Generic, TypeVar
 
 import attrs
@@ -39,3 +40,35 @@ class BaseResponse(Generic[V]):
     created_index: int = attrs.field(converter=int)
     modified_index: int = attrs.field(converter=int)
     value: V = attrs.field()
+
+
+# A response from Apisix always contains id, create_time, update_time and others schema specific fields.
+# If we want to keep attrs classes with slot=True, we canno't use MixinClass.
+def response_class_factory(cls: type) -> type:
+    """
+    Dynamically creates a new response class based on the given schema specific class `cls`.
+
+    The generated class inherits from `cls` and adds the following fields:
+        - id (str): Identifier, converted to string, defaults to an empty string.
+        - create_time (datetime): Creation time, converted from a timestamp, defaults to epoch.
+        - update_time (datetime): Update time, converted from a timestamp, defaults to epoch.
+
+    The returned class uses attrs, is frozen (immutable), and uses slots for memory efficiency.
+
+    Args:
+        cls (type): The base class to inherit from.
+
+    Returns:
+        type: A new attrs-based response class with additional fields.
+    """
+    return attrs.make_class(
+        f"Response{cls.__name__}",
+        {
+            "id": attrs.field(converter=str, default=""),
+            "create_time": attrs.field(converter=datetime.fromtimestamp, default=datetime.fromtimestamp(0)),
+            "update_time": attrs.field(converter=datetime.fromtimestamp, default=datetime.fromtimestamp(0)),
+        },
+        bases=(cls,),
+        slots=True,
+        frozen=True,
+    )
