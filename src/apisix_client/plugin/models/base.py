@@ -1,13 +1,14 @@
 import attrs
 
 from apisix_client.common import ATTRS_META_APISIX_KEYWORD
-from apisix_client.plugin.models.key_auth import KeyAuth, KeyAuthSettings
-from apisix_client.plugin.models.limit_count import LimitCount
-from apisix_client.plugin.models.observability.loggers.clickhouse import ClickhouseLogger
+from apisix_client.plugin.models.authentication import BaseAuth, KeyAuth, KeyAuthSettings, RouteBaseAuth
+from apisix_client.plugin.models.observability.loggers import ClickhouseLogger, FileLogger
+from apisix_client.plugin.models.security.consumer_restriction import ConsumerRestriction
+from apisix_client.plugin.models.traffic.limit_count import LimitCount
 
 
 @attrs.define()
-class Plugins:
+class BasePlugins:
     key_auth: KeyAuth | KeyAuthSettings | None = attrs.field(
         default=None, metadata={ATTRS_META_APISIX_KEYWORD: "key-auth"}
     )
@@ -16,4 +17,24 @@ class Plugins:
     )
     clickhouse_logger: ClickhouseLogger | None = attrs.field(
         default=None, metadata={ATTRS_META_APISIX_KEYWORD: "clickhouse-logger"}
+    )
+    file_logger: FileLogger | None = attrs.field(
+        default=None, metadata={ATTRS_META_APISIX_KEYWORD: "file-logger"}
+    )
+    consumer_restriction: ConsumerRestriction | None = attrs.field(
+        default=None, metadata={ATTRS_META_APISIX_KEYWORD: "consumer-restriction"}
+    )
+
+
+@attrs.define()
+class Plugins(BasePlugins):
+    base_auth: BaseAuth | RouteBaseAuth | None = attrs.field(
+        default=None, metadata={ATTRS_META_APISIX_KEYWORD: "basic-auth"}
+    )
+
+
+@attrs.define()
+class RoutePlugins(BasePlugins):
+    base_auth: RouteBaseAuth | None = attrs.field(
+        default=None, metadata={ATTRS_META_APISIX_KEYWORD: "basic-auth"}
     )

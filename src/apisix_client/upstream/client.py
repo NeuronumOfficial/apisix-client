@@ -14,7 +14,7 @@ class UpstreamClient:
         self.url_postfix = "/upstreams"
 
     def _handle_response_after_create(self, response: httpx.Response) -> str | None:
-        if response.status_code == 400:  # Bad request
+        if response.status_code not in (200, 201):  # Bad request
             self._logger.info(f"Bad request! {response.text}")
             return None
 
