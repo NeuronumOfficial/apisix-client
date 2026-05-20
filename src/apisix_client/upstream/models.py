@@ -18,6 +18,14 @@ class TLS:
 
 
 @attrs.define()
+class Node:
+    host: str = attrs.field(converter=str)
+    weight: int = attrs.field(converter=int)
+    port: int | None = attrs.field(converter=int_or_none, default=None)
+    priority: int | None = attrs.field(converter=int_or_none, default=None)
+
+
+@attrs.define()
 class KeepalivePool:
     size: int = attrs.field(converter=int)
     idle_timeout: int = attrs.field(converter=int)
@@ -29,7 +37,7 @@ class Upstream:
     name: str | None = attrs.field(converter=str_or_none, default=None)
     desc: str | None = attrs.field(converter=str_or_none, default=None)
     type: LoadBalancers | None = attrs.field(default="roundrobin")
-    nodes: dict | None = attrs.field(default=None)
+    nodes: list[Node] = attrs.field(default=[])
     service_name: str | None = attrs.field(converter=str_or_none, default=None)
     discovery_type: str | None = attrs.field(converter=str_or_none, default=None)
     hash_on: str | None = attrs.field(converter=str_or_none, default=None)

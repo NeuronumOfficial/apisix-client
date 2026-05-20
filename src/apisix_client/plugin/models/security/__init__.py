@@ -1,0 +1,1 @@
+from apisix_client.plugin.models.security.consumer_restriction import ConsumerRestriction

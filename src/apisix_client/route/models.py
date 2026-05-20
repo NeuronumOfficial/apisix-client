@@ -5,7 +5,7 @@ import attrs
 
 from apisix_client.base_models import response_class_factory
 from apisix_client.common import Timeout, str_or_none
-from apisix_client.plugin import Plugins
+from apisix_client.plugin import RoutePlugins
 
 
 def route_id_validator(value) -> None:
@@ -64,7 +64,7 @@ class Route:
     methods: list[str] | None = attrs.field(default=None)
     vars: list[list[str]] | None = attrs.field(default=None)
     filter_func: str | None = attrs.field(default=None)
-    plugins: Plugins | None = attrs.field(default=None)
+    plugins: RoutePlugins | None = attrs.field(default=None)
     script: str | None = attrs.field(default=None)
     upstream: object | None = attrs.field(
         default=None

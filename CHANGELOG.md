@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2026-05-20
+
+### Added
+
+- Added support for `basic-auth` plugin.
+- Added support for `file-logger` plugin.
+- Added support for `consumer-restriction` plugin.
+
+### Changed
+
+- Restructured plugins module. Separated to submodules based on plugin categories in APISIX documentation.
+
+
 ## [0.5.0] - 2025-10-04
 
 ### Added

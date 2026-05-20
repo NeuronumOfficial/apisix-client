@@ -1,10 +1,14 @@
 from datetime import datetime
-from typing import Callable, Generic, TypeVar
+from typing import Callable, Generic, Literal, TypeVar
 
 import attrs
 import cattrs
 
 from apisix_client.common import ATTRS_META_APISIX_KEYWORD, str_or_none
+
+HTTP_METHODS = Literal[
+    "GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS", "CONNECT", "TRACE", "PURGE"
+]
 
 converter = cattrs.GenConverter()
 
