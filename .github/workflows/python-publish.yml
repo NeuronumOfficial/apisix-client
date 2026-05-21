@@ -46,7 +46,7 @@ jobs:
       id-token: write
     environment:
       name: pypi
-      url: https://pypi.org/p/apisix-client/${{ github.event.release.name }}
+      url: https://pypi.org/p/apisix-client/
 
     steps:
       - name: Retrieve release distributions
