@@ -1,4 +1,6 @@
 from apisix_client.plugin.models.authentication import BaseAuth, KeyAuth, KeyAuthSettings, RouteBaseAuth
 from apisix_client.plugin.models.base import Plugins, RoutePlugins
-from apisix_client.plugin.models.observability.loggers.clickhouse import ClickhouseLogger
-from apisix_client.plugin.models.traffic.limit_count import LimitCount
+from apisix_client.plugin.models.observability.loggers import ClickhouseLogger, FileLogger
+from apisix_client.plugin.models.security import ConsumerRestriction
+from apisix_client.plugin.models.traffic import LimitCount
+from apisix_client.plugin.models.transformation import ProxyRewrite

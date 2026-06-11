@@ -5,6 +5,7 @@ from apisix_client.plugin.models.authentication import BaseAuth, KeyAuth, KeyAut
 from apisix_client.plugin.models.observability.loggers import ClickhouseLogger, FileLogger
 from apisix_client.plugin.models.security.consumer_restriction import ConsumerRestriction
 from apisix_client.plugin.models.traffic.limit_count import LimitCount
+from apisix_client.plugin.models.transformation.proxy_rewrite import ProxyRewrite
 
 
 @attrs.define()
@@ -23,6 +24,9 @@ class BasePlugins:
     )
     consumer_restriction: ConsumerRestriction | None = attrs.field(
         default=None, metadata={ATTRS_META_APISIX_KEYWORD: "consumer-restriction"}
+    )
+    proxy_rewrite: ProxyRewrite | None = attrs.field(
+        default=None, metadata={ATTRS_META_APISIX_KEYWORD: "proxy-rewrite"}
     )
 
 
