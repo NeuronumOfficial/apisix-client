@@ -10,6 +10,6 @@ class BaseAuth:
 
 
 @attrs.define()
-class RouteBaseAuth:
+class BaseAuthSetup:
     hide_credentials: bool | None = attrs.field(converter=bool_or_none, default=None)
     anonymous_consumer: bool | None = attrs.field(converter=bool_or_none, default=None)
