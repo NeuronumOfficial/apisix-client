@@ -1,7 +1,7 @@
 import attrs
 
 from apisix_client.common import ATTRS_META_APISIX_KEYWORD
-from apisix_client.plugin.models.authentication import BaseAuth, KeyAuth, KeyAuthSettings, RouteBaseAuth
+from apisix_client.plugin.models.authentication import BaseAuth, BaseAuthSetup, KeyAuth, KeyAuthSettings
 from apisix_client.plugin.models.observability.loggers import ClickhouseLogger, FileLogger
 from apisix_client.plugin.models.security.consumer_restriction import ConsumerRestriction
 from apisix_client.plugin.models.traffic.limit_count import LimitCount
@@ -9,7 +9,11 @@ from apisix_client.plugin.models.transformation.proxy_rewrite import ProxyRewrit
 
 
 @attrs.define()
-class BasePlugins:
+class Plugins:
+    base_auth: BaseAuth | None = attrs.field(default=None, metadata={ATTRS_META_APISIX_KEYWORD: "basic-auth"})
+    base_auth_setup: BaseAuthSetup | None = attrs.field(
+        default=None, metadata={ATTRS_META_APISIX_KEYWORD: "basic-auth"}
+    )
     key_auth: KeyAuth | KeyAuthSettings | None = attrs.field(
         default=None, metadata={ATTRS_META_APISIX_KEYWORD: "key-auth"}
     )
@@ -27,18 +31,4 @@ class BasePlugins:
     )
     proxy_rewrite: ProxyRewrite | None = attrs.field(
         default=None, metadata={ATTRS_META_APISIX_KEYWORD: "proxy-rewrite"}
-    )
-
-
-@attrs.define()
-class Plugins(BasePlugins):
-    base_auth: BaseAuth | RouteBaseAuth | None = attrs.field(
-        default=None, metadata={ATTRS_META_APISIX_KEYWORD: "basic-auth"}
-    )
-
-
-@attrs.define()
-class RoutePlugins(BasePlugins):
-    base_auth: RouteBaseAuth | None = attrs.field(
-        default=None, metadata={ATTRS_META_APISIX_KEYWORD: "basic-auth"}
     )
