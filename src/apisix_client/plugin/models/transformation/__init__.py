@@ -1,1 +1,2 @@
-from apisix_client.plugin.models.transformation.proxy_rewrite import ModifyHeaders, ProxyRewrite
+from apisix_client.plugin.models.transformation.proxy_rewrite import ProxyRewrite
+from apisix_client.plugin.models.transformation.response_rewrite import ResponseFilter, ResponseRewrite
