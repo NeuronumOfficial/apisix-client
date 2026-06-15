@@ -1,15 +1,7 @@
 import attr
 
 from apisix_client.base_models import HTTP_METHODS
-from apisix_client.common import ATTRS_META_APISIX_KEYWORD
-from apisix_client.common.converter import str_or_none
-
-
-@attr.define()
-class ModifyHeaders:
-    add: dict[str, str] | None = attr.field(default=None)
-    set_: dict[str, str] | None = attr.field(default=None, metadata={ATTRS_META_APISIX_KEYWORD: "set"})
-    remove: list[str] | None = attr.field(default=None)
+from apisix_client.common import ModifyHeaders, str_or_none
 
 
 @attr.define()
