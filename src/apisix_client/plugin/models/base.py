@@ -4,7 +4,7 @@ from apisix_client.common import ATTRS_META_APISIX_KEYWORD
 from apisix_client.plugin.models.authentication import BaseAuth, BaseAuthSetup, KeyAuth, KeyAuthSettings
 from apisix_client.plugin.models.observability.loggers import ClickhouseLogger, FileLogger
 from apisix_client.plugin.models.security.consumer_restriction import ConsumerRestriction
-from apisix_client.plugin.models.traffic.limit_count import LimitCount
+from apisix_client.plugin.models.traffic import LimitCount, RequestValidation
 from apisix_client.plugin.models.transformation import ProxyRewrite, ResponseRewrite
 
 
@@ -34,4 +34,7 @@ class Plugins:
     )
     response_rewrite: ResponseRewrite | None = attrs.field(
         default=None, metadata={ATTRS_META_APISIX_KEYWORD: "response-rewrite"}
+    )
+    request_validation: RequestValidation | None = attrs.field(
+        default=None, metadata={ATTRS_META_APISIX_KEYWORD: "request-validation"}
     )
