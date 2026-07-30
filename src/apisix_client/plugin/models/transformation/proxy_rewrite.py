@@ -11,3 +11,7 @@ class ProxyRewrite:
     regex_uri: list[str] | None = attr.field(default=None)
     host: str | None = attr.field(converter=str_or_none, default=None)
     headers: ModifyHeaders | None = attr.field(default=None)
+
+    @staticmethod
+    def get_apisix_key() -> str:
+        return "proxy-rewrite"

@@ -10,14 +10,14 @@ Schemas = Literal["http", "https", "grpc", "grpcs", "tcp", "udp", "tls"]
 LoadBalancers = Literal["chash", "roundrobin", "ewma", "leastconn"]
 
 
-@attrs.define()
+@attrs.define
 class TLS:
     client_cert: str | None = attrs.field(converter=str_or_none, default=None)
     client_key: str | None = attrs.field(converter=str_or_none, default=None)
     client_cert_id: str | None = attrs.field(converter=str_or_none, default=None)
 
 
-@attrs.define()
+@attrs.define
 class Node:
     host: str = attrs.field(converter=str)
     weight: int = attrs.field(converter=int)
@@ -25,14 +25,14 @@ class Node:
     priority: int | None = attrs.field(converter=int_or_none, default=None)
 
 
-@attrs.define()
+@attrs.define
 class KeepalivePool:
     size: int = attrs.field(converter=int)
     idle_timeout: int = attrs.field(converter=int)
     requests: int = attrs.field(converter=int)
 
 
-@attrs.define()
+@attrs.define
 class Upstream:
     name: str | None = attrs.field(converter=str_or_none, default=None)
     desc: str | None = attrs.field(converter=str_or_none, default=None)

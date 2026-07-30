@@ -3,13 +3,21 @@ import attrs
 from apisix_client.common.converter import bool_or_none, str_or_none
 
 
-@attrs.define()
+@attrs.define
 class BaseAuth:
     username: str | None = attrs.field(converter=str_or_none, default=None)
     password: str | None = attrs.field(converter=str_or_none, default=None)
 
+    @staticmethod
+    def get_apisix_key() -> str:
+        return "basic-auth"
 
-@attrs.define()
+
+@attrs.define
 class BaseAuthSetup:
     hide_credentials: bool | None = attrs.field(converter=bool_or_none, default=None)
     anonymous_consumer: bool | None = attrs.field(converter=bool_or_none, default=None)
+
+    @staticmethod
+    def get_apisix_key() -> str:
+        return "basic-auth"

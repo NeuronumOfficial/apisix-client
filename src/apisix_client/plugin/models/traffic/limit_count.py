@@ -7,7 +7,7 @@ from apisix_client.common import bool_or_none, int_or_none, str_or_none
 LimitCountPolicy = Literal["local", "redis", "redis-cluster"]
 
 
-@attrs.define()
+@attrs.define
 class LimitCountRule:
     count: int = attrs.field(converter=int)
     time_window: int = attrs.field(converter=int)
@@ -15,7 +15,7 @@ class LimitCountRule:
     header_prefix: str | None = attrs.field(converter=str_or_none, default=None)
 
 
-@attrs.define()
+@attrs.define
 class LimitCount:
     count: int = attrs.field(converter=int)
     time_window: int = attrs.field(converter=int)
@@ -41,3 +41,7 @@ class LimitCount:
     redis_cluster_name: str | None = attrs.field(converter=str_or_none, default=None)
     redis_cluster_ssl: bool | None = attrs.field(converter=bool_or_none, default=None)
     redis_cluster_ssl_verify: bool | None = attrs.field(converter=bool_or_none, default=None)
+
+    @staticmethod
+    def get_apisix_key() -> str:
+        return "limit-count"

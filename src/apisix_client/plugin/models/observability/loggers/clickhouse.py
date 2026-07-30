@@ -4,7 +4,7 @@ from apisix_client.common.converter import bool_or_none, int_or_none, str_or_non
 
 
 # https://apisix.apache.org/docs/apisix/plugins/clickhouse-logger/
-@attrs.define()
+@attrs.define
 class ClickhouseLogger:
     endpoint_addrs: list[str] = attrs.field(converter=list)
     database: str = attrs.field(converter=str)
@@ -25,3 +25,7 @@ class ClickhouseLogger:
     buffer_duration: int | None = attrs.field(converter=int_or_none, default=None)
     max_retry_count: int | None = attrs.field(converter=int_or_none, default=None)
     retry_delay: int | None = attrs.field(converter=int_or_none, default=None)
+
+    @staticmethod
+    def get_apisix_key() -> str:
+        return "clickhouse-logger"

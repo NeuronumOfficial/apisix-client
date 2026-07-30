@@ -1,7 +1,5 @@
 import attr
 
-ATTRS_META_APISIX_KEYWORD = "apisix_keyword"
-
 APISIX_MIN_PAGE_SIZE = 10
 APISIX_MAX_PAGE_SIZE = 500
 
@@ -31,5 +29,5 @@ class Timeout:
 @attr.define()
 class ModifyHeaders:
     add: dict[str, str] | None = attr.field(default=None)
-    set_: dict[str, str] | None = attr.field(default=None, metadata={ATTRS_META_APISIX_KEYWORD: "set"})
+    set_: dict[str, str] | None = attr.field(default=None, alias="set")
     remove: list[str] | None = attr.field(default=None)

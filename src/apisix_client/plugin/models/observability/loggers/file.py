@@ -10,3 +10,7 @@ class FileLogger:
     include_resp_body: bool | None = attr.field(converter=bool, default=False)
     include_resp_body_expr: list | None = attr.field(default=None)
     match: list[list] | None = attr.field(default=None)
+
+    @staticmethod
+    def get_apisix_key() -> str:
+        return "file-logger"
