@@ -3,7 +3,7 @@ from typing import Any, Literal
 import attr
 import jsonschema
 
-from apisix_client.common import ATTRS_META_APISIX_KEYWORD, bool_or_none, int_or_none, str_or_none
+from apisix_client.common import bool_or_none, int_or_none, str_or_none
 
 JsonSchemaType = Literal["string", "integer", "number", "boolean", "array", "object", "null"]
 
@@ -18,22 +18,12 @@ class RequestPropertySchema:
     default: Any = attr.field(default=None)
     minimum: int | float | None = attr.field(default=None)
     maximum: int | float | None = attr.field(default=None)
-    min_length: int | None = attr.field(
-        default=None, converter=int_or_none, metadata={ATTRS_META_APISIX_KEYWORD: "minLength"}
-    )
-    max_length: int | None = attr.field(
-        default=None, converter=int_or_none, metadata={ATTRS_META_APISIX_KEYWORD: "maxLength"}
-    )
-    min_items: int | None = attr.field(
-        default=None, converter=int_or_none, metadata={ATTRS_META_APISIX_KEYWORD: "minItems"}
-    )
-    max_items: int | None = attr.field(
-        default=None, converter=int_or_none, metadata={ATTRS_META_APISIX_KEYWORD: "maxItems"}
-    )
+    min_length: int | None = attr.field(default=None, converter=int_or_none, alias="minLength")
+    max_length: int | None = attr.field(default=None, converter=int_or_none, alias="maxLength")
+    min_items: int | None = attr.field(default=None, converter=int_or_none, alias="minItems")
+    max_items: int | None = attr.field(default=None, converter=int_or_none, alias="maxItems")
     items: "RequestPropertySchema | None" = attr.field(default=None)
-    unique_items: bool | None = attr.field(
-        default=None, converter=bool_or_none, metadata={ATTRS_META_APISIX_KEYWORD: "uniqueItems"}
-    )
+    unique_items: bool | None = attr.field(default=None, converter=bool_or_none, alias="uniqueItems")
 
     def to_dict(self) -> dict[str, Any]:
         _key_map = {
@@ -99,3 +89,7 @@ class RequestValidation:
     def __attrs_post_init__(self) -> None:
         if self.header_schema is None and self.body_schema is None:
             raise ValueError("At least one of 'header_schema' or 'body_schema' must be provided.")
+
+    @staticmethod
+    def get_apisix_key() -> str:
+        return "request-validation"

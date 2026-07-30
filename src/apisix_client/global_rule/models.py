@@ -1,5 +1,5 @@
 import attrs
 
 
-@attrs.define()
+@attrs.define
 class GlobalRuleResponse: ...

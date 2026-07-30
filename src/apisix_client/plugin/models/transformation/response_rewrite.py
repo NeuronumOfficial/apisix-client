@@ -23,3 +23,7 @@ class ResponseRewrite:
     headers: ModifyHeaders | None = attr.field(default=None)
     vars: list[list[str]] | None = attr.field(default=None)
     filters: list[ResponseFilter] | None = attr.field(default=None)
+
+    @staticmethod
+    def get_apisix_key() -> str:
+        return "response-rewrite"

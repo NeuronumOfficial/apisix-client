@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.0] - 2026-07-30
+
+## Changed
+- Changed the way plugins are handled in the client. Possibility to use whatever plugin even is not defined in this library. Minimum. requirement is attrs class implementing Plugin Protocol.
+
 ## [0.9.0] - 2026-06-18
  - Added support for `request-validation` plugin.
 

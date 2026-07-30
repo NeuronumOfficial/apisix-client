@@ -18,3 +18,7 @@ class ConsumerRestriction:
     rejected_msg: str | None = attr.field(converter=str_or_none, default=None)
     type: str | None = attr.field(converter=str_or_none, default=None)
     allowed_by_methods: list[AllowedByMethods] = attr.field(default=list())
+
+    @staticmethod
+    def get_apisix_key() -> str:
+        return "consumer-restriction"

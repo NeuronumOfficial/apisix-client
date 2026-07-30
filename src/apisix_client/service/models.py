@@ -2,13 +2,13 @@ import attrs
 
 from apisix_client.base_models import BaseSchema, response_class_factory
 from apisix_client.common.converter import str_or_none
-from apisix_client.plugin.models import Plugins
+from apisix_client.plugin import PluginProtocol
 from apisix_client.upstream.models import Upstream
 
 
-@attrs.define()
+@attrs.define
 class Service(BaseSchema):
-    plugins: Plugins | None = attrs.field(default=None)
+    plugins: list[PluginProtocol] = attrs.field(factory=list)
     upstream: Upstream | None = attrs.field(default=None)
     upstream_id: str | None = attrs.field(default=None, converter=str_or_none)
     labels: dict | None = attrs.field(default=None)

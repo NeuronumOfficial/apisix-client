@@ -1,10 +1,11 @@
 from datetime import datetime
-from typing import Callable, Generic, Literal, TypeVar
+from typing import Generic, Iterable, Literal, TypeVar, get_args, get_origin
 
 import attrs
 import cattrs
 
-from apisix_client.common import ATTRS_META_APISIX_KEYWORD, str_or_none
+from apisix_client.common import str_or_none
+from apisix_client.plugin.models.protocol import PluginProtocol
 
 HTTP_METHODS = Literal[
     "GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS", "CONNECT", "TRACE", "PURGE"
@@ -13,28 +14,25 @@ HTTP_METHODS = Literal[
 converter = cattrs.GenConverter()
 
 
-def get_apisix_unstructure_hook(cls) -> Callable[[object], dict]:
-    def apisix_json_format(obj: object) -> dict:
-        results = {}
-        for field in attrs.fields(cls):
-            field_data = getattr(obj, field.name)
-            if not field_data and not isinstance(field_data, (int, float, bool)):
-                continue
-
-            key = field.metadata.get(ATTRS_META_APISIX_KEYWORD, field.name)
-            results[key] = converter.unstructure(field_data)
-
-        return results
-
-    return apisix_json_format
+def unstructure_plugins(plugins: Iterable[PluginProtocol]) -> dict[str, dict]:
+    return {plugin.get_apisix_key(): converter.unstructure(plugin) for plugin in plugins}
 
 
-converter.register_unstructure_hook_factory(
-    lambda obj: hasattr(obj, "__attrs_attrs__"), get_apisix_unstructure_hook
+def is_plugins_collection_type(tp: object) -> bool:
+    origin = get_origin(tp)
+    if origin not in (list, tuple, set, frozenset, Iterable):
+        return False
+    args = get_args(tp)
+    return len(args) == 1 and args[0] is PluginProtocol
+
+
+converter.register_unstructure_hook_func(
+    is_plugins_collection_type,
+    unstructure_plugins,
 )
 
 
-@attrs.define()
+@attrs.define
 class BaseSchema:
     name: str | None = attrs.field(default=None, converter=str_or_none)
     desc: str | None = attrs.field(default=None, converter=str_or_none)
@@ -44,7 +42,7 @@ V = TypeVar("V")
 
 
 # https://apisix.apache.org/docs/apisix/admin-api/#v3-new-feature
-@attrs.define()
+@attrs.define
 class BaseResponse(Generic[V]):
     key: str = attrs.field(converter=str)
     created_index: int = attrs.field(converter=int)
