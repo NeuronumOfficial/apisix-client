@@ -29,17 +29,13 @@ class UpstreamClient:
     def create_with_id_generation(self, new_route: Upstream) -> str | None:
         req_body = converter.unstructure(new_route)
         filtered_req_body = clean_none_values(req_body)
-        self._logger.info(f"Request body: {filtered_req_body}")
         response = self._httpx_client.post(self.url_postfix, json=filtered_req_body)
         return self._handle_response_after_create(response)
 
     def create_or_update(self, new_route: Upstream, route_id: str) -> str | None:
         req_body = converter.unstructure(new_route)
         filtered_req_body = clean_none_values(req_body)
-        self._logger.info(f"Request body: {filtered_req_body}")
         response = self._httpx_client.put(self.url_postfix + f"/{route_id}", json=filtered_req_body)
-        self._logger.info(f"request headers: {response.request.headers}")
-        self._logger.info(f"request body: {response.request.content}")
         return self._handle_response_after_create(response)
 
     def get(self, id: str) -> BaseResponse[UpstreamResponse] | None:
