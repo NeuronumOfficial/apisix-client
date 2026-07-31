@@ -3,8 +3,8 @@ from apisix_client.plugin.models.observability.loggers import ClickhouseLogger, 
 from apisix_client.plugin.models.security import ConsumerRestriction
 from apisix_client.plugin.models.traffic import (
     LimitCount,
+    RequestPropertySchema,
     RequestValidation,
     RequestValidationSchema,
-    RequestPropertySchema,
 )
 from apisix_client.plugin.models.transformation import ProxyRewrite, ResponseFilter, ResponseRewrite

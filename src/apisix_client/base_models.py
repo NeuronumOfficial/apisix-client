@@ -3,7 +3,6 @@ from typing import Generic, Literal, TypeVar
 
 import attrs
 
-
 from apisix_client.common import str_or_none
 
 HTTP_METHODS = Literal[

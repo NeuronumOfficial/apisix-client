@@ -1,9 +1,9 @@
 import httpx
 
 from apisix_client.base_models import BaseResponse
-from apisix_client.converter import converter
 from apisix_client.common import Pagging
 from apisix_client.common.utils import build_url, pythonize_json_response
+from apisix_client.converter import clean_none_values, converter
 from apisix_client.protocols import Logger
 from apisix_client.upstream.models import Upstream, UpstreamResponse
 
@@ -15,8 +15,12 @@ class UpstreamClient:
         self.url_postfix = "/upstreams"
 
     def _handle_response_after_create(self, response: httpx.Response) -> str | None:
-        if response.status_code not in (200, 201):  # Bad request
+        if response.status_code >= 400 and response.status_code < 500:  # Bad request
             self._logger.info(f"Bad request! {response.text}")
+            return None
+
+        if response.status_code >= 500:  # Server error
+            self._logger.warning(f"Server error! {response.text}")
             return None
 
         json_response = response.json()
@@ -24,12 +28,18 @@ class UpstreamClient:
 
     def create_with_id_generation(self, new_route: Upstream) -> str | None:
         req_body = converter.unstructure(new_route)
-        response = self._httpx_client.post(self.url_postfix, json=req_body)
+        filtered_req_body = clean_none_values(req_body)
+        self._logger.info(f"Request body: {filtered_req_body}")
+        response = self._httpx_client.post(self.url_postfix, json=filtered_req_body)
         return self._handle_response_after_create(response)
 
     def create_or_update(self, new_route: Upstream, route_id: str) -> str | None:
         req_body = converter.unstructure(new_route)
-        response = self._httpx_client.put(self.url_postfix + f"/{route_id}", json=req_body)
+        filtered_req_body = clean_none_values(req_body)
+        self._logger.info(f"Request body: {filtered_req_body}")
+        response = self._httpx_client.put(self.url_postfix + f"/{route_id}", json=filtered_req_body)
+        self._logger.info(f"request headers: {response.request.headers}")
+        self._logger.info(f"request body: {response.request.content}")
         return self._handle_response_after_create(response)
 
     def get(self, id: str) -> BaseResponse[UpstreamResponse] | None:

@@ -1,5 +1,7 @@
-import cattrs
 from typing import Iterable, get_args, get_origin
+
+import cattrs
+
 from apisix_client.plugin.models.protocol import PluginProtocol
 
 converter = cattrs.GenConverter()
@@ -21,3 +23,13 @@ converter.register_unstructure_hook_func(
     is_plugins_collection_type,
     unstructure_plugins,
 )
+
+
+def clean_none_values(value: object) -> object:
+    if isinstance(value, dict):
+        return {k: clean_none_values(v) for k, v in value.items() if v is not None and v != ""}
+
+    if isinstance(value, list):
+        return [clean_none_values(item) for item in value if item is not None and item != ""]
+
+    return value
