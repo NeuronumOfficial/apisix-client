@@ -1,6 +1,7 @@
 import httpx
 
-from apisix_client.base_models import BaseResponse, converter
+from apisix_client.base_models import BaseResponse
+from apisix_client.converter import converter
 from apisix_client.common import Pagging, pythonize_json_response
 from apisix_client.protocols import Logger
 from apisix_client.route.models import Route, RouteResponse
