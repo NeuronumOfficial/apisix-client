@@ -1,8 +1,9 @@
 import httpx
 
-from apisix_client.base_models import BaseResponse, converter
+from apisix_client.base_models import BaseResponse
 from apisix_client.common import Pagging, build_url, pythonize_json_response
 from apisix_client.consumer.models import Consumer, ConsumerResponse
+from apisix_client.converter import clean_none_values, converter
 from apisix_client.protocols import Logger
 
 
@@ -14,7 +15,8 @@ class ConsumerClient:
 
     def create_or_update(self, new_customer: Consumer) -> bool:
         req_body = converter.unstructure(new_customer)
-        response = self._httpx_client.put(self.url_postfix, json=req_body)
+        filtered_req_body = clean_none_values(req_body)
+        response = self._httpx_client.put(self.url_postfix, json=filtered_req_body)
 
         if response.status_code == 400:  # Bad request
             self._logger.info(f"Bad request. {response.json()}")

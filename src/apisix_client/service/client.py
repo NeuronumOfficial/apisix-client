@@ -1,8 +1,9 @@
 import httpx
 
-from apisix_client.base_models import BaseResponse, converter
+from apisix_client.base_models import BaseResponse
 from apisix_client.common import Pagging
 from apisix_client.common.utils import pythonize_json_response
+from apisix_client.converter import clean_none_values, converter
 from apisix_client.protocols import Logger
 from apisix_client.service.models import Service, ServiceResponse
 
@@ -14,8 +15,12 @@ class ServiceClient:
         self.url_postfix = "/services"
 
     def _handle_response_after_create(self, response: httpx.Response) -> str | None:
-        if response.status_code == 400:  # Bad request
+        if response.status_code >= 400 and response.status_code < 500:  # Bad request
             self._logger.info(f"Bad request! {response.text}")
+            return None
+
+        if response.status_code >= 500:  # Server error
+            self._logger.info(f"Server error! {response.text}")
             return None
 
         json_response = response.json()
@@ -23,12 +28,14 @@ class ServiceClient:
 
     def create_with_id_generation(self, new_obj: Service) -> str | None:
         req_body = converter.unstructure(new_obj)
-        response = self._httpx_client.post(self.url_postfix, json=req_body)
+        filtered_req_body = clean_none_values(req_body)
+        response = self._httpx_client.post(self.url_postfix, json=filtered_req_body)
         return self._handle_response_after_create(response)
 
     def create_or_update(self, new_obj: Service, route_id: str) -> str | None:
         req_body = converter.unstructure(new_obj)
-        response = self._httpx_client.put(self.url_postfix + f"/{route_id}", json=req_body)
+        filtered_req_body = clean_none_values(req_body)
+        response = self._httpx_client.put(self.url_postfix + f"/{route_id}", json=filtered_req_body)
         return self._handle_response_after_create(response)
 
     def get(self, id: str) -> BaseResponse[ServiceResponse] | None:
